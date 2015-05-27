@@ -1,0 +1,32 @@
+<!doctype html>
+
+<html ng-app="joggingApp">
+<head>
+    <title> Jogging tracker</title>
+
+    <link rel="stylesheet" type="text/css" href="/static/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css"
+          href="/static/bower_components/bootstrap-daterangepicker/daterangepicker-bs3.css">
+    <script type="text/javascript" src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/bower_components/moment/moment.js"></script>
+    <script type="text/javascript" src="/static/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+    <script type="text/javascript" src="/static/bower_components/angular/angular.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="client.js"></script>
+</head>
+<body ng-controller="mainCtrl">
+
+Hello {{name}}
+
+<div class="col-md-8 col-sm-8">
+    <div ng-repeat="entry in entries | orderBy:'date' " class="alert alert-info">
+        <span class="glyphicon glyphicon-calendar"></span> {{entry.date | date:'fullDate'}}
+        <span class="glyphicon glyphicon-signal"></span> {{entry.distance}}
+        <span class="glyphicon glyphicon-hourglass"></span> {{entry.time}}
+        <span class="glyphicon glyphicon-oil"></span> {{entry.distance / entry.time | number:2}}
+    </div>
+</div>
+</body>
+</html>

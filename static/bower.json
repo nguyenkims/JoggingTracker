@@ -1,0 +1,10 @@
+{
+  "name": "Jogging tracker",
+  "description": "Track user jogging activity",
+  "version": "0.1.0",
+  "dependencies": {
+    "angular": "latest",
+    "bootstrap": "latest",
+    "ng-bs-daterangepicker": "latest"
+  }
+}
