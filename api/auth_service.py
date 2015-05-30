@@ -1,4 +1,5 @@
-from flask import request, jsonify
+from flask import request, jsonify, g
+from flask.ext.httpauth import HTTPBasicAuth
 
 from api import app, get_logger
 from api.models import User
@@ -8,6 +9,20 @@ TOKEN_DURATION = 60 * 60 * 24 * 365
 
 logger = get_logger(__name__)
 
+auth = HTTPBasicAuth()
+
+@auth.verify_password
+def verify_token(token, useless):
+    """
+    Verify if the token is valid then get the user associated with this token.
+    The fetched user is then put in global context.
+    """
+    user = User.verify_auth_token(token)
+    if not user:
+        return False
+
+    g.user = user
+    return True
 
 @app.route('/user/create', methods=['POST'])
 def classic_registration():
