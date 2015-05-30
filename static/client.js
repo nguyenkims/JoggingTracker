@@ -11,6 +11,10 @@ app.config(['$routeProvider',
                 templateUrl: 'login.html',
                 controller: 'loginCtrl'
             }).
+            when('/register', {
+                templateUrl: 'register.html',
+                controller: 'registerCtrl'
+            }).
             otherwise({
                 redirectTo: '/main'
             });
@@ -89,9 +93,36 @@ app.controller('loginCtrl', function ($scope, $http, $location, $rootScope, $loc
 
     $scope.error_message = "";
 
+    $scope.goToRegister = function () {
+        $location.path('/register');
+    };
+
     $scope.login = function () {
-        console.log("log user:" + $scope.username + ";pass:" + $scope.password);
+        console.log("log user:" + $scope.username);
         $http.post("/user/token", {username: $scope.username, password: $scope.password}).
+            success(function (data, status, headers) {
+                console.log(data.token);
+                $localStorage.token = data.token;
+                $rootScope.token = data.token;
+                // go to main page
+                $location.path('/main');
+            }).
+            error(function (data, status, headers) {
+                $scope.error_message = data.error;
+            });
+    }
+});
+
+app.controller('registerCtrl', function ($scope, $http, $location, $rootScope, $localStorage) {
+    $scope.error_message = "";
+
+    $scope.goToLogin = function () {
+        $location.path('/login');
+    };
+
+    $scope.register = function () {
+        console.log("register user:" + $scope.username);
+        $http.post("/user/create", {username: $scope.username, password: $scope.password}).
             success(function (data, status, headers) {
                 console.log(data.token);
                 $localStorage.token = data.token;
