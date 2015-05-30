@@ -1,2 +1,5 @@
 .idea/
 static/bower_components
+jogging.db
+*.pyc
+log/
