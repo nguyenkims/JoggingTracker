@@ -56,3 +56,12 @@ app.controller('mainCtrl', function ($scope, $http) {
     }
 
 });
+
+app.controller('loginCtrl', function ($scope, $http, $location) {
+    console.log("loginCtrl");
+
+    $scope.login = function () {
+        console.log("log user:" + $scope.username + ";pass:" + $scope.password);
+        $location.path('/main');
+    }
+});
