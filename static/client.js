@@ -43,6 +43,16 @@ app.controller('mainCtrl', function ($scope, $http) {
         }
     };
 
+    $scope.makeEntryEditable = function (entry) {
+        if (entry.writable === undefined || !entry.writable) {
+            entry.writable = true;
+            entry.editModeText = "Update";
+        } else {
+            entry.writable = false;
+            entry.editModeText = "Edit";
+        }
+    };
+
     $scope.startDate = null;
     $scope.endDate = null;
 

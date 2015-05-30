@@ -29,12 +29,18 @@ Hello {{name}}
 </div>
 
 
-<div class="row col-md-8 col-sm-8">
+<div class="row">
     <div ng-repeat="entry in getDates() | orderBy:'date' " class="alert alert-info">
         <span class="glyphicon glyphicon-calendar"></span> {{entry.date | date:'fullDate'}}
         <span class="glyphicon glyphicon-signal"></span> {{entry.distance}}
-        <span class="glyphicon glyphicon-hourglass"></span> {{entry.time}}
+        <span class="glyphicon glyphicon-hourglass"></span>
+        <input type="number" ng-readonly="!entry.writable" ng-model="entry.time">
+
         <span class="glyphicon glyphicon-oil"></span> {{entry.distance / entry.time | number:2}}
+
         <button class="btn btn-danger" ng-click="deleteEntry(entry)">Delete</button>
+        <button class="btn btn-warning" ng-click="makeEntryEditable(entry)">
+            {{entry.editModeText || "Edit"}}
+        </button>
     </div>
 </div>
