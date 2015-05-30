@@ -20,7 +20,7 @@ app.config(['$routeProvider',
             });
     }]);
 
-app.controller('mainCtrl', function ($scope, $http) {
+app.controller('mainCtrl', function ($scope, $http, $localStorage, $location) {
     console.log("mainCtrl");
     console.log("token from root=" + $scope.token);
 
@@ -55,6 +55,12 @@ app.controller('mainCtrl', function ($scope, $http) {
             entry.writable = false;
             entry.editModeText = "Edit";
         }
+    };
+
+    $scope.logout = function () {
+        delete $localStorage.token;
+        delete $localStorage.username;
+        $location.path('/login');
     };
 
     $scope.startDate = null;
@@ -103,7 +109,10 @@ app.controller('loginCtrl', function ($scope, $http, $location, $rootScope, $loc
             success(function (data, status, headers) {
                 console.log(data.token);
                 $localStorage.token = data.token;
+                $localStorage.username = data.username;
+
                 $rootScope.token = data.token;
+                $rootScope.username = data.username;
                 // go to main page
                 $location.path('/main');
             }).
@@ -126,7 +135,10 @@ app.controller('registerCtrl', function ($scope, $http, $location, $rootScope, $
             success(function (data, status, headers) {
                 console.log(data.token);
                 $localStorage.token = data.token;
+                $localStorage.username = data.username;
+
                 $rootScope.token = data.token;
+                $rootScope.username = data.username;
                 // go to main page
                 $location.path('/main');
             }).
