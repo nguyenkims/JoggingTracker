@@ -35,5 +35,6 @@ Hello {{name}}
         <span class="glyphicon glyphicon-signal"></span> {{entry.distance}}
         <span class="glyphicon glyphicon-hourglass"></span> {{entry.time}}
         <span class="glyphicon glyphicon-oil"></span> {{entry.distance / entry.time | number:2}}
+        <button class="btn btn-danger" ng-click="deleteEntry(entry)">Delete</button>
     </div>
 </div>

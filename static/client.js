@@ -23,8 +23,8 @@ app.controller('mainCtrl', function ($scope, $http) {
     $scope.name = "Test user";
 
     $scope.entries = [
-        {date: new Date(), distance: 10.2, time: 20.3},
-        {date: new Date(1995, 11, 17), distance: 7.2, time: 2.3}
+        {id: 1, date: new Date(), distance: 10.2, time: 20.3},
+        {id: 2, date: new Date(1995, 11, 17), distance: 7.2, time: 2.3}
     ];
 
     $scope.addEntry = function () {
@@ -34,6 +34,13 @@ app.controller('mainCtrl', function ($scope, $http) {
             time: $scope.time
         };
         $scope.entries.push(entry);
+    };
+
+    $scope.deleteEntry = function (entry) {
+        for (var i = 0; i < $scope.entries.length; i++) {
+            if ($scope.entries[i].id === entry.id)
+                $scope.entries.splice(i, 1);
+        }
     };
 
     $scope.startDate = null;
