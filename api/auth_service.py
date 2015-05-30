@@ -4,12 +4,14 @@ from flask.ext.httpauth import HTTPBasicAuth
 from api import app, get_logger
 from api.models import User
 
+
 # 1 year of token duration = 60 seconds * 60 minutes * 24 hour * 365 days
 TOKEN_DURATION = 60 * 60 * 24 * 365
 
 logger = get_logger(__name__)
 
 auth = HTTPBasicAuth()
+
 
 @auth.verify_password
 def verify_token(token, useless):
@@ -24,11 +26,12 @@ def verify_token(token, useless):
     g.user = user
     return True
 
+
 @app.route('/user/create', methods=['POST'])
 def classic_registration():
-    form = request.form
-    username = form.get('username')
-    password = form.get('password')
+    data = get_data(request)
+    username = data.get('username')
+    password = data.get('password')
 
     if not username or not password:
         return get_error("username, password must be provided"), 400
@@ -47,9 +50,9 @@ def classic_registration():
 
 @app.route('/user/token', methods=['GET', 'POST'])
 def get_token():
-    form = request.form
-    username = form.get('username')
-    password = form.get('password')
+    data = get_data(request)
+    username = data.get('username')
+    password = data.get('password')
 
     if not username or not password:
         return get_error("username, password must be provided"), 400
@@ -70,3 +73,10 @@ def user_info(user):
 
 def get_error(msg):
     return jsonify({"error": msg})
+
+
+def get_data(req):
+    """get form data or json data from request"""
+    if len(req.form) == 0:
+        return req.json
+    return req.form
