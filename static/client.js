@@ -23,9 +23,18 @@ app.controller('mainCtrl', function ($scope, $http) {
     $scope.name = "Test user";
 
     $scope.entries = [
-        {date: Date.now(), distance: 10.2, time: 20.3},
+        {date: new Date(), distance: 10.2, time: 20.3},
         {date: new Date(1995, 11, 17), distance: 7.2, time: 2.3}
     ];
+
+    $scope.addEntry = function () {
+        entry = {
+            date: $scope.date,
+            distance: $scope.distance,
+            time: $scope.time
+        };
+        $scope.entries.push(entry);
+    };
 
     $scope.startDate = null;
     $scope.endDate = null;

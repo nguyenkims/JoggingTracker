@@ -5,6 +5,15 @@ Hello {{name}}
 <p> end date: {{endDate}} </p>
 
 <div class="row">
+    <form>
+        <datepicker ng-model="date" min-date="minDate" show-weeks="true" class="well well-sm"></datepicker>
+        Distance: <input type="number" ng-model="distance">
+        Time: <input type="number" ng-model="time">
+        <button class="btn btn-default" ng-click="addEntry()">Add</button>
+    </form>
+</div>
+
+<div class="row">
     <button class="btn btn-default" ng-click="clearDate()">Clear date</button>
 </div>
 
