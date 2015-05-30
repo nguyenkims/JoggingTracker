@@ -38,7 +38,7 @@ class DevConfig(object):
     SECRET_KEY = 'fitle secret'
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder=os.path.join(rootdir, "static"))
 app.config.from_object(DevConfig())
 db = SQLAlchemy(app)
 import models
