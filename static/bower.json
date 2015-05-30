@@ -5,6 +5,7 @@
   "dependencies": {
     "angular": "latest",
     "bootstrap": "latest",
-    "angular-bootstrap":"latest"
+    "angular-bootstrap":"latest",
+    "angular-route": "~1.3.0"
   }
 }

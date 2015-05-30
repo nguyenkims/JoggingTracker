@@ -1,4 +1,20 @@
-var app = angular.module('joggingApp', ['ui.bootstrap']);
+var app = angular.module('joggingApp', ['ngRoute', 'ui.bootstrap']);
+
+app.config(['$routeProvider',
+    function ($routeProvider) {
+        $routeProvider.
+            when('/main', {
+                templateUrl: 'main.html',
+                controller: 'mainCtrl'
+            }).
+            when('/login', {
+                templateUrl: 'login.html',
+                controller: 'loginCtrl'
+            }).
+            otherwise({
+                redirectTo: '/main'
+            });
+    }]);
 
 app.controller('mainCtrl', function ($scope, $http) {
     console.log("mainCtrl");

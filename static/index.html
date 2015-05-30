@@ -10,45 +10,14 @@
     <script type="text/javascript" src="/static/bower_components/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/static/bower_components/angular/angular.min.js"></script>
+    <script src="/static/bower_components/angular-route/angular-route.js"></script>
     <script type="text/javascript" src="/static/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
 
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="client.js"></script>
 </head>
 
-<body ng-controller="mainCtrl" class="container">
-
-Hello {{name}}
-
-<p> start date: {{startDate}} </p>
-
-<p> end date: {{endDate}} </p>
-
-<div class="row">
-    <button class="btn btn-default" ng-click="clearDate()">Clear date</button>
-</div>
-
-<div class="row">
-    <div class="col-md-4" style="display:inline-block; min-height:290px;">
-        <datepicker ng-model="startDate" min-date="minDate" show-weeks="true" class="well well-sm"></datepicker>
-    </div>
-
-    <div class="col-md-4" style="display:inline-block; min-height:290px;">
-        <datepicker ng-model="endDate" min-date="minDate" show-weeks="true" class="well well-sm"></datepicker>
-    </div>
-
-</div>
-
-
-<div class="row col-md-8 col-sm-8">
-    <div ng-repeat="entry in getDates() | orderBy:'date' " class="alert alert-info">
-        <span class="glyphicon glyphicon-calendar"></span> {{entry.date | date:'fullDate'}}
-        <span class="glyphicon glyphicon-signal"></span> {{entry.distance}}
-        <span class="glyphicon glyphicon-hourglass"></span> {{entry.time}}
-        <span class="glyphicon glyphicon-oil"></span> {{entry.distance / entry.time | number:2}}
-    </div>
-</div>
-
-
+<body class="container">
+    <div ng-view></div>
 </body>
 </html>
