@@ -1,4 +1,4 @@
-var app = angular.module('joggingApp', ['ngRoute', 'ui.bootstrap']);
+var app = angular.module('joggingApp', ['ngRoute', 'ui.bootstrap', 'ngStorage']);
 
 app.config(['$routeProvider',
     function ($routeProvider) {
@@ -18,6 +18,7 @@ app.config(['$routeProvider',
 
 app.controller('mainCtrl', function ($scope, $http) {
     console.log("mainCtrl");
+    console.log("token from root=" + $scope.token);
 
     $scope.name = "Test user";
 
@@ -57,11 +58,23 @@ app.controller('mainCtrl', function ($scope, $http) {
 
 });
 
-app.controller('loginCtrl', function ($scope, $http, $location) {
+app.controller('loginCtrl', function ($scope, $http, $location, $rootScope, $localStorage) {
     console.log("loginCtrl");
+
+    $scope.error_message = "";
 
     $scope.login = function () {
         console.log("log user:" + $scope.username + ";pass:" + $scope.password);
-        $location.path('/main');
+        $http.post("/user/token", {username: $scope.username, password: $scope.password}).
+            success(function (data, status, headers) {
+                console.log(data.token);
+                $localStorage.token = data.token;
+                $rootScope.token = data.token;
+                // go to main page
+                $location.path('/main');
+            }).
+            error(function (data, status, headers) {
+                $scope.error_message = data.error;
+            });
     }
 });
