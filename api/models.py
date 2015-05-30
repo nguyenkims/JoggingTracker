@@ -4,9 +4,6 @@ from itsdangerous import (TimedJSONWebSignatureSerializer
 from api import db, app, hashing
 
 
-
-
-
 class User(db.Model):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
@@ -32,7 +29,6 @@ class User(db.Model):
         s = Serializer(app.config['SECRET_KEY'], expires_in=expiration)
         return s.dumps({'id': self.id})
 
-
     @staticmethod
     def verify_auth_token(token):
         s = Serializer(app.config['SECRET_KEY'])
@@ -52,8 +48,12 @@ class Entry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
+    date = db.Column(db.Date)
+    distance = db.Column(db.Float)
+    time = db.Column(db.Float)
+
     def __repr__(self):
-        return "id:%s username:%s" % (self.id, self.username)
+        return "id:%s date:%s distance:%s time:%s" % (self.id, self.date, self.distance, self.time)
 
     def create(self):
         # save the new user to DB

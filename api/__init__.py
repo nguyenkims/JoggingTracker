@@ -46,4 +46,5 @@ import models
 # create all tables
 db.create_all()
 
-from auth_service import *
+import auth_service
+import entry_service
