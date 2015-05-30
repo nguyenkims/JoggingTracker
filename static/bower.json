@@ -5,6 +5,6 @@
   "dependencies": {
     "angular": "latest",
     "bootstrap": "latest",
-    "ng-bs-daterangepicker": "latest"
+    "angular-bootstrap":"latest"
   }
 }
