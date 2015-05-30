@@ -29,22 +29,22 @@ app.controller('mainCtrl', function ($scope, $http) {
     $scope.startDate = null;
     $scope.endDate = null;
 
-    $scope.clearDate = function(){
+    $scope.clearDate = function () {
         $scope.startDate = null;
         $scope.endDate = null;
     };
 
-    $scope.getDates = function(){
+    $scope.getDates = function () {
         startDate = $scope.startDate;
         endDate = $scope.endDate;
 
         console.log("startDate:" + startDate);
         res = [];
 
-        for (i =0; i < $scope.entries.length; i++){
+        for (i = 0; i < $scope.entries.length; i++) {
             d = $scope.entries[i].date;
-            startOk = (startDate != null && startDate < d) || (startDate == null);
-            endOk = (endDate != null && endDate > d) || (endDate == null);
+            startOk = (startDate != null && startDate < d) || (startDate == null);
+            endOk = (endDate != null && endDate > d) || (endDate == null);
 
             if (startOk && endOk)
                 res.push($scope.entries[i]);
