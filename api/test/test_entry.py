@@ -38,13 +38,14 @@ class EntryTest(unittest.TestCase):
         r = requests.post(prefix + "/entry/create",
                           auth=(EntryTest.token, 'useless password'),
                           data={
-                              "date": "2012-12-31",
+                              "date": 1400000000000,
                               "distance": "2.8",
                               "time": "10.3"
                           })
 
         assert r.status_code == 201
-        assert r.json()["date"] == "2012-12-31"
+        print r.json()["date"]
+        assert r.json()["date"] == 1400000000000
         assert r.json()["distance"] == "2.8"
         assert r.json()["time"] == "10.3"
 
@@ -60,13 +61,13 @@ class EntryTest(unittest.TestCase):
 
         assert r.status_code == 400
 
-    def test_create_entry_bad_date_format(self):
-        """test entry will not be created if date format is not correct"""
+    def test_create_entry_bad_date(self):
+        """test entry will not be created if date is too big"""
         # "month" and "day" is switched
         r = requests.post(prefix + "/entry/create",
                           auth=(EntryTest.token, 'useless password'),
                           data={
-                              "date": "2012-31-12",
+                              "date": "1000000000000000000",
                               "distance": "2.8",
                               "time": "10.3"
                           })
@@ -79,7 +80,7 @@ class EntryTest(unittest.TestCase):
         r = requests.post(prefix + "/entry/create",
                           auth=(EntryTest.token, 'useless password'),
                           data={
-                              "date": "2012-12-31",
+                              "date": 1312908481000,
                               "distance": "2,8",
                               "time": "10.3"
                           })

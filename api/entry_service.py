@@ -3,7 +3,7 @@ from datetime import datetime
 from flask import jsonify, g, request
 
 from api import app, get_logger
-from api.auth_service import auth, get_error
+from api.auth_service import auth, get_error, get_data
 from api.models import Entry
 
 logger = get_logger(__name__)
@@ -12,17 +12,19 @@ logger = get_logger(__name__)
 @app.route("/entry/create", methods=['GET', 'POST'])
 @auth.login_required
 def add_entry():
-    date = request.form.get("date")
-    distance = request.form.get("distance")
-    time = request.form.get("time")
+    data = get_data(request)
+    date = data.get("date")  # in millisecs
+    distance = data.get("distance")
+    time = data.get("time")
 
     if not date or not distance or not time:
         return get_error("date, distance, time must be provided"), 400
 
     try:
-        date = datetime.strptime(date, '%Y-%m-%d')
-    except ValueError:  # parsing fails
-        return get_error("date must be of format day/month/year, for ex 2000-12-31"), 400
+        date = int(date)
+        date = datetime.utcfromtimestamp(date // 1000)
+    except ValueError:  # year is out of range for example
+        return get_error("date is maybe too big."), 400
 
     try:
         distance = float(distance)
@@ -47,5 +49,9 @@ def get_all_entries():
     return jsonify({"data": entries}), 200
 
 
+epoch = datetime.utcfromtimestamp(0)
+
+
 def get_entry_info(entry):
-    return {"date": str(entry.date), "distance": str(entry.distance), "time": str(entry.time)}
+    milliSecs = (entry.date - epoch).total_seconds() * 1000
+    return {"date": int(milliSecs), "distance": str(entry.distance), "time": str(entry.time)}

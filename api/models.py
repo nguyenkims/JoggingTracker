@@ -48,7 +48,7 @@ class Entry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-    date = db.Column(db.Date)
+    date = db.Column(db.DateTime)
     distance = db.Column(db.Float)
     time = db.Column(db.Float)
 
