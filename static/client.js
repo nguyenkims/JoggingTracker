@@ -22,7 +22,14 @@ app.config(['$routeProvider',
 
 app.controller('mainCtrl', function ($scope, $http, $localStorage, $location) {
     console.log("mainCtrl");
+
+    $scope.token = $localStorage.token;
+    $scope.username = $localStorage.username;
+
     console.log("token from root=" + $scope.token);
+
+    var h = window.btoa($scope.token + ':' + 'uselesspassword');
+    $http.defaults.headers.common['Authorization'] = 'Basic ' + h;
 
     $scope.name = "Test user";
 
@@ -32,12 +39,21 @@ app.controller('mainCtrl', function ($scope, $http, $localStorage, $location) {
     ];
 
     $scope.addEntry = function () {
-        entry = {
+        var entry = {
             date: $scope.date,
             distance: $scope.distance,
             time: $scope.time
         };
-        $scope.entries.push(entry);
+
+        $http.post("/entry/create",
+            {date: entry.date.getTime(), distance: entry.distance, time: entry.time}).
+            success(function (data, status, headers) {
+                console.log(data);
+                $scope.entries.push(entry);
+            }).
+            error(function (data, status, headers) {
+                console.log('error.' + data);
+            });
     };
 
     $scope.deleteEntry = function (entry) {
