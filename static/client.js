@@ -128,7 +128,7 @@ app.controller('mainCtrl', function ($scope, $http, $localStorage, $location) {
 
 });
 
-app.controller('loginCtrl', function ($scope, $http, $location, $rootScope, $localStorage) {
+app.controller('loginCtrl', function ($scope, $http, $location, $localStorage) {
     cl("loginCtrl");
 
     $scope.error_message = "";
@@ -145,8 +145,6 @@ app.controller('loginCtrl', function ($scope, $http, $location, $rootScope, $loc
                 $localStorage.token = data.token;
                 $localStorage.username = data.username;
 
-                $rootScope.token = data.token;
-                $rootScope.username = data.username;
                 // go to main page
                 $location.path('/main');
             }).
@@ -156,7 +154,7 @@ app.controller('loginCtrl', function ($scope, $http, $location, $rootScope, $loc
     }
 });
 
-app.controller('registerCtrl', function ($scope, $http, $location, $rootScope, $localStorage) {
+app.controller('registerCtrl', function ($scope, $http, $location, $localStorage) {
     $scope.error_message = "";
 
     $scope.goToLogin = function () {
@@ -171,8 +169,6 @@ app.controller('registerCtrl', function ($scope, $http, $location, $rootScope, $
                 $localStorage.token = data.token;
                 $localStorage.username = data.username;
 
-                $rootScope.token = data.token;
-                $rootScope.username = data.username;
                 // go to main page
                 $location.path('/main');
             }).
