@@ -45,15 +45,20 @@ app.controller('mainCtrl', function ($scope, $http, $localStorage, $location) {
             time: $scope.time
         };
 
+        $("body").addClass("loading");
         $http.post("/entry/create",
             {date: entry.date.getTime(), distance: entry.distance, time: entry.time}).
             success(function (data, status, headers) {
                 entry.id = data.id;
                 $scope.entries.push(entry);
+                $("body").removeClass("loading");
             }).
             error(function (data, status, headers) {
+                alert("Adding entry fails with this error:" + data.error);
                 console.log('error.' + data);
+                $("body").removeClass("loading");
             });
+
     };
 
     $scope.deleteEntry = function (entry) {
@@ -91,8 +96,7 @@ app.controller('mainCtrl', function ($scope, $http, $localStorage, $location) {
         startDate = $scope.startDate;
         endDate = $scope.endDate;
 
-        console.log("startDate:" + startDate);
-        res = [];
+        var res = [];
 
         for (i = 0; i < $scope.entries.length; i++) {
             d = $scope.entries[i].date;
