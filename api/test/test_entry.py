@@ -43,11 +43,11 @@ class EntryTest(unittest.TestCase):
                               "time": "10.3"
                           })
 
-        assert r.status_code == 201      
+        assert r.status_code == 201
+        print r.json()["date"]
         assert r.json()["date"] == 1400000000000
-        assert r.json()["distance"] == "2.8"
-        assert r.json()["time"] == "10.3"
-        assert r.json()["id"] is not None
+        assert r.json()["distance"] == 2.8
+        assert r.json()["time"] == 10.3
 
     def test_create_entry_missing_field(self):
         """test entry will not be created if it has missing fields"""
@@ -95,3 +95,39 @@ class EntryTest(unittest.TestCase):
 
         assert r.status_code == 200
         assert r.json().get("data") is not None
+
+    def test_delete_entry_successfully(self):
+        """create a new entry and then delete it"""
+        r = requests.post(prefix + "/entry/create",
+                          auth=(EntryTest.token, 'useless password'),
+                          data={
+                              "date": 1400000000000,
+                              "distance": "2.8",
+                              "time": "10.3"
+                          })
+
+        assert r.status_code == 201
+        print r.json()["date"]
+        assert r.json()["date"] == 1400000000000
+        assert r.json()["distance"] == 2.8
+        assert r.json()["time"] == 10.3
+
+        entry_id = r.json()["id"]
+
+        r = requests.post(prefix + "/entry/delete",
+                          auth=(EntryTest.token, 'useless password'),
+                          data={
+                              "id": entry_id
+                          })
+
+        assert r.status_code == 200
+
+    def test_delete_non_existing_entry(self):
+        """delete a non-existing entry: an entry having negative id"""
+        r = requests.post(prefix + "/entry/delete",
+                          auth=(EntryTest.token, 'useless password'),
+                          data={
+                              "id": -1
+                          })
+
+        assert r.status_code == 400

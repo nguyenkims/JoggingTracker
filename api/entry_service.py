@@ -40,6 +40,24 @@ def add_entry():
     return jsonify(get_entry_info(entry)), 201
 
 
+@app.route("/entry/delete", methods=['GET', 'POST'])
+@auth.login_required
+def delete_entry():
+    data = get_data(request)
+    entry_id = int(data.get("id"))
+    entry_to_delete = None
+    for entry in g.user.entries:
+        if entry.id == entry_id:
+            entry_to_delete = entry
+            break
+
+    if entry_to_delete:
+        entry_to_delete.delete()
+        return jsonify({"message": "delete successfully entry:" + str(entry_id)}), 200
+    else:
+        return get_error("cannot delete entry:" + str(entry_id)), 400
+
+
 @app.route("/entry/all", methods=['GET', 'POST'])
 @auth.login_required
 def get_all_entries():
@@ -54,4 +72,4 @@ epoch = datetime.utcfromtimestamp(0)
 
 def get_entry_info(entry):
     milliSecs = (entry.date - epoch).total_seconds() * 1000
-    return {"id":entry.id, "date": int(milliSecs), "distance": entry.distance, "time": entry.time}
+    return {"id": entry.id, "date": int(milliSecs), "distance": entry.distance, "time": entry.time}

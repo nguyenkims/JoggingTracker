@@ -59,3 +59,7 @@ class Entry(db.Model):
         # save the new user to DB
         db.session.add(self)
         db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
