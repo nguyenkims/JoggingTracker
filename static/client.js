@@ -111,6 +111,17 @@ app.controller('mainCtrl', function ($scope, $http, $localStorage, $location) {
         } else {
             entry.writable = false;
             entry.editModeText = "Edit";
+
+            // update the entry in server
+            $http.post("/entry/changetime", {id: entry.id, time: entry.time}).
+                success(function (data, status, headers) {
+                    $("body").removeClass("loading");
+                }).
+                error(function (data, status, headers) {
+                    alert("Modifying entry fails with this error:" + data.error);
+                    cl('error.' + data);
+                    $("body").removeClass("loading");
+                });
         }
     };
 
