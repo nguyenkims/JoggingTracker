@@ -21,22 +21,29 @@ app.config(['$routeProvider',
     }]);
 
 app.controller('mainCtrl', function ($scope, $http, $localStorage, $location) {
-    console.log("mainCtrl");
-
     $scope.token = $localStorage.token;
     $scope.username = $localStorage.username;
-
-    console.log("token from root=" + $scope.token);
+    $scope.entries = [];
 
     var h = window.btoa($scope.token + ':' + 'uselesspassword');
     $http.defaults.headers.common['Authorization'] = 'Basic ' + h;
 
-    $scope.name = "Test user";
+    initEntries();
 
-    $scope.entries = [
-        {id: 1, date: new Date(), distance: 10.2, time: 20.3},
-        {id: 2, date: new Date(1995, 11, 17), distance: 7.2, time: 2.3}
-    ];
+    function initEntries() {
+        console.log("init entries");
+        $("body").addClass("loading");
+        $http.get("/entry/all").
+            success(function (data, status, headers) {
+                $("body").removeClass("loading");
+                console.log(data.data);
+                $scope.entries = data.data;
+            }).
+            error(function (data, status, headers) {
+                $("body").removeClass("loading");
+                alert("Getting all entries fails with this error:" + data.error);
+            });
+    }
 
     $scope.addEntry = function () {
         var entry = {
