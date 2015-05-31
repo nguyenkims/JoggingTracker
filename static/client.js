@@ -78,10 +78,22 @@ app.controller('mainCtrl', function ($scope, $http, $localStorage, $location) {
     };
 
     $scope.deleteEntry = function (entry) {
-        for (var i = 0; i < $scope.entries.length; i++) {
-            if ($scope.entries[i].id === entry.id)
-                $scope.entries.splice(i, 1);
-        }
+        $("body").addClass("loading");
+        $http.post("/entry/delete", {id: entry.id}).
+            success(function (data, status, headers) {
+                // remove from local entries
+                for (var i = 0; i < $scope.entries.length; i++) {
+                    if ($scope.entries[i].id === entry.id) {
+                        $scope.entries.splice(i, 1);
+                    }
+                }
+                $("body").removeClass("loading");
+            }).
+            error(function (data, status, headers) {
+                alert("Deleting entry fails with this error:" + data.error);
+                cl('error.' + data);
+                $("body").removeClass("loading");
+            });
     };
 
     $scope.makeEntryEditable = function (entry) {
