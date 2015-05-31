@@ -1,5 +1,12 @@
 var app = angular.module('joggingApp', ['ngRoute', 'ui.bootstrap', 'ngStorage']);
 
+debug = true;
+
+var cl = function (msg) {
+    if (debug)
+        console.log(msg);
+};
+
 app.config(['$routeProvider',
     function ($routeProvider) {
         $routeProvider.
@@ -24,6 +31,8 @@ app.controller('mainCtrl', function ($scope, $http, $localStorage, $location) {
     $scope.token = $localStorage.token;
     $scope.username = $localStorage.username;
     $scope.entries = [];
+    $scope.startDate = null;
+    $scope.endDate = null;
 
     var h = window.btoa($scope.token + ':' + 'uselesspassword');
     $http.defaults.headers.common['Authorization'] = 'Basic ' + h;
@@ -31,12 +40,12 @@ app.controller('mainCtrl', function ($scope, $http, $localStorage, $location) {
     initEntries();
 
     function initEntries() {
-        console.log("init entries");
+        cl("init entries");
         $("body").addClass("loading");
         $http.get("/entry/all").
             success(function (data, status, headers) {
                 $("body").removeClass("loading");
-                console.log(data.data);
+                cl(data.data);
                 $scope.entries = data.data;
             }).
             error(function (data, status, headers) {
@@ -62,7 +71,7 @@ app.controller('mainCtrl', function ($scope, $http, $localStorage, $location) {
             }).
             error(function (data, status, headers) {
                 alert("Adding entry fails with this error:" + data.error);
-                console.log('error.' + data);
+                cl('error.' + data);
                 $("body").removeClass("loading");
             });
 
@@ -91,8 +100,6 @@ app.controller('mainCtrl', function ($scope, $http, $localStorage, $location) {
         $location.path('/login');
     };
 
-    $scope.startDate = null;
-    $scope.endDate = null;
 
     $scope.clearDate = function () {
         $scope.startDate = null;
@@ -113,7 +120,7 @@ app.controller('mainCtrl', function ($scope, $http, $localStorage, $location) {
             if (startOk && endOk)
                 res.push($scope.entries[i]);
             else
-                console.log("do not push:" + d);
+                cl("do not push:" + d);
         }
 
         return res;
@@ -122,7 +129,7 @@ app.controller('mainCtrl', function ($scope, $http, $localStorage, $location) {
 });
 
 app.controller('loginCtrl', function ($scope, $http, $location, $rootScope, $localStorage) {
-    console.log("loginCtrl");
+    cl("loginCtrl");
 
     $scope.error_message = "";
 
@@ -131,10 +138,10 @@ app.controller('loginCtrl', function ($scope, $http, $location, $rootScope, $loc
     };
 
     $scope.login = function () {
-        console.log("log user:" + $scope.username);
+        cl("log user:" + $scope.username);
         $http.post("/user/token", {username: $scope.username, password: $scope.password}).
             success(function (data, status, headers) {
-                console.log(data.token);
+                cl(data.token);
                 $localStorage.token = data.token;
                 $localStorage.username = data.username;
 
@@ -157,10 +164,10 @@ app.controller('registerCtrl', function ($scope, $http, $location, $rootScope, $
     };
 
     $scope.register = function () {
-        console.log("register user:" + $scope.username);
+        cl("register user:" + $scope.username);
         $http.post("/user/create", {username: $scope.username, password: $scope.password}).
             success(function (data, status, headers) {
-                console.log(data.token);
+                cl(data.token);
                 $localStorage.token = data.token;
                 $localStorage.username = data.username;
 
