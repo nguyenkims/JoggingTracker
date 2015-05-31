@@ -131,3 +131,33 @@ class EntryTest(unittest.TestCase):
                           })
 
         assert r.status_code == 400
+
+    def test_modify_entry_successfully(self):
+        """create a new entry and then modify its time"""
+        r = requests.post(prefix + "/entry/create",
+                          auth=(EntryTest.token, 'useless password'),
+                          data={
+                              "date": 1400000000000,
+                              "distance": "2.8",
+                              "time": "10.3"
+                          })
+
+        assert r.status_code == 201
+        assert r.json()["date"] == 1400000000000
+        assert r.json()["distance"] == 2.8
+        assert r.json()["time"] == 10.3
+
+        entry_id = r.json()["id"]
+
+        r = requests.post(prefix + "/entry/changetime",
+                          auth=(EntryTest.token, 'useless password'),
+                          data={
+                              "id": entry_id,
+                              "time": 5.2
+                          })
+
+        assert r.status_code == 200
+        assert r.json()["id"] == entry_id
+        assert r.json()["date"] == 1400000000000
+        assert r.json()["distance"] == 2.8
+        assert r.json()["time"] == 5.2  # new time

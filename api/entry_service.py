@@ -58,6 +58,28 @@ def delete_entry():
         return get_error("cannot delete entry:" + str(entry_id)), 400
 
 
+@app.route("/entry/changetime", methods=['GET', 'POST'])
+@auth.login_required
+def change_time():
+    data = get_data(request)
+    entry_id = int(data.get("id"))
+    new_time = float(data.get("time"))
+
+    entry_to_modify = None
+    for entry in g.user.entries:
+        if entry.id == entry_id:
+            entry_to_modify = entry
+            break
+
+    if entry_to_modify:
+        entry_to_modify.time = new_time
+        entry_to_modify.update()
+        return jsonify(get_entry_info(entry_to_modify)), 200
+    else:
+        return get_error("there's no entry:" + str(entry_id) +
+                         " with time:" + str(new_time)), 400
+
+
 @app.route("/entry/all", methods=['GET', 'POST'])
 @auth.login_required
 def get_all_entries():
