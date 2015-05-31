@@ -30,6 +30,14 @@ app.config(['$routeProvider',
 app.controller('mainCtrl', function ($scope, $http, $localStorage, $location) {
     $scope.token = $localStorage.token;
     $scope.username = $localStorage.username;
+
+    if ($scope.token === undefined || $scope.username === undefined) {
+        $location.path('/login');
+        return;
+    }
+
+    // todo: check the validity of token
+
     $scope.entries = [];
     $scope.startDate = null;
     $scope.endDate = null;
