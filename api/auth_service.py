@@ -32,6 +32,7 @@ def classic_registration():
     data = get_data(request)
     username = data.get('username')
     password = data.get('password')
+    token_duration = data.get('duration')
 
     if not username or not password:
         return get_error("username, password must be provided"), 400
@@ -45,7 +46,11 @@ def classic_registration():
     user = User(username=username)
     user.create(password)
 
-    return jsonify(user_info(user)), 201
+    if token_duration:
+        token_duration = int(token_duration)
+        return jsonify(user_info(user, token_duration)), 201
+    else:
+        return jsonify(user_info(user)), 201
 
 
 @app.route('/user/token', methods=['GET', 'POST'])
@@ -53,6 +58,7 @@ def get_token():
     data = get_data(request)
     username = data.get('username')
     password = data.get('password')
+    token_duration = data.get('duration')
 
     if not username or not password:
         return get_error("username, password must be provided"), 400
@@ -62,13 +68,28 @@ def get_token():
         logger.info("username:%s , password:%s are not correct" % (username, password))
         return get_error("user or password incorrect"), 400
 
-    return jsonify(user_info(user)), 200
+    if token_duration:
+        token_duration = int(token_duration)
+        return jsonify(user_info(user, token_duration)), 200
+    else:
+        return jsonify(user_info(user)), 200
 
 
-def user_info(user):
-    token = user.generate_auth_token(TOKEN_DURATION).decode('ascii')
+@app.route('/user/tokenvalidity', methods=['GET', 'POST'])
+def get_token_validity_status():
+    """check if the token is still valid. If not return 400. If valid, return new token"""
+    token = request.authorization.username
+    user = User.verify_auth_token(token)
+    if not user:
+        return get_error("token not valid"), 400
+    else:
+        return jsonify(user_info(user)), 200
+
+
+def user_info(user, token_duration=TOKEN_DURATION):
+    token = user.generate_auth_token(token_duration).decode('ascii')
     return {'username': user.username, 'token': token,
-            'duration': TOKEN_DURATION}
+            'duration': token_duration}
 
 
 def get_error(msg):

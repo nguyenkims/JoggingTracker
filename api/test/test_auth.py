@@ -1,3 +1,4 @@
+import time
 import unittest
 
 import requests
@@ -56,6 +57,40 @@ class AuthTest(unittest.TestCase):
 
         assert r.status_code == 200
         assert r.json()["username"] == "test user"
+
+    def test_token_valide(self):
+        r = requests.post(prefix + "/user/token",
+                          data={
+                              "username": "test user",
+                              "password": "test password"
+                          })
+        assert r.status_code == 200
+        assert r.json()["username"] == "test user"
+        token = r.json()["token"]
+
+        r = requests.post(prefix + "/user/tokenvalidity",
+                          auth=(token, 'useless password'))
+        assert r.status_code == 200
+        assert r.json()["username"] == "test user"
+        assert r.json()["token"] is not None
+
+    def test_token_not_valide(self):
+        r = requests.post(prefix + "/user/token",
+                          data={
+                              "username": "test user",
+                              "password": "test password",
+                              "duration": 1  # 1 second of token duration
+                          })
+        assert r.status_code == 200
+        assert r.json()["username"] == "test user"
+        token = r.json()["token"]
+
+        # sleep for 2 sec
+        time.sleep(2)
+
+        r = requests.post(prefix + "/user/tokenvalidity",
+                          auth=(token, 'useless password'))
+        assert r.status_code == 400
 
 
 if __name__ == '__main__':
