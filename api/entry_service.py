@@ -54,4 +54,4 @@ epoch = datetime.utcfromtimestamp(0)
 
 def get_entry_info(entry):
     milliSecs = (entry.date - epoch).total_seconds() * 1000
-    return {"date": int(milliSecs), "distance": str(entry.distance), "time": str(entry.time)}
+    return {"id":str(entry.id), "date": int(milliSecs), "distance": str(entry.distance), "time": str(entry.time)}

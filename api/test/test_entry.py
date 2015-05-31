@@ -43,11 +43,11 @@ class EntryTest(unittest.TestCase):
                               "time": "10.3"
                           })
 
-        assert r.status_code == 201
-        print r.json()["date"]
+        assert r.status_code == 201      
         assert r.json()["date"] == 1400000000000
         assert r.json()["distance"] == "2.8"
         assert r.json()["time"] == "10.3"
+        assert r.json()["id"] is not None
 
     def test_create_entry_missing_field(self):
         """test entry will not be created if it has missing fields"""

@@ -48,7 +48,7 @@ app.controller('mainCtrl', function ($scope, $http, $localStorage, $location) {
         $http.post("/entry/create",
             {date: entry.date.getTime(), distance: entry.distance, time: entry.time}).
             success(function (data, status, headers) {
-                console.log(data);
+                entry.id = data.id;
                 $scope.entries.push(entry);
             }).
             error(function (data, status, headers) {
