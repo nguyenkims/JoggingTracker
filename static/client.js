@@ -41,11 +41,26 @@ app.controller('mainCtrl', function ($scope, $http, $localStorage, $location) {
     $scope.entries = [];
     $scope.startDate = null;
     $scope.endDate = null;
+    $scope.format = 'yyyy-MM-dd';
 
     var h = window.btoa($scope.token + ':' + 'uselesspassword');
     $http.defaults.headers.common['Authorization'] = 'Basic ' + h;
 
     initEntries();
+
+    $scope.openStartDate = function ($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+
+        $scope.startDateOpened = true;
+    };
+
+    $scope.openEndDate = function ($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+
+        $scope.endDateOpened = true;
+    };
 
     function initEntries() {
         cl("init entries");

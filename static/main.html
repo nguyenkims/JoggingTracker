@@ -1,48 +1,62 @@
-Hello {{username}}
-
-<p> start date: {{startDate}} </p>
-
-<p> end date: {{endDate}} </p>
-
-<button class="btn btn-toolbar" ng-click="logout()">Log out</button>
-
+<!--Header-->
 <div class="row">
-    <form>
-        <datepicker ng-model="date" min-date="minDate" show-weeks="true" class="well well-sm"></datepicker>
-        Distance: <input type="number" ng-model="distance">
-        Time: <input type="number" ng-model="time">
-        <button class="btn btn-default" ng-click="addEntry()">Add</button>
-    </form>
+    Hello {{username}}
+    <button class="btn btn-toolbar" ng-click="logout()">Log out</button>
 </div>
 
-<div class="row">
-    <button class="btn btn-default" ng-click="clearDate()">Clear date</button>
-</div>
+<br/>
 
 <div class="row">
-    <div class="col-md-4" style="display:inline-block; min-height:290px;">
-        <datepicker ng-model="startDate" min-date="minDate" show-weeks="true" class="well well-sm"></datepicker>
+    <!-- Add new entry-->
+    <div class="col-md-3">
+        <form>
+            <datepicker ng-model="date" show-weeks="true"></datepicker>
+            Distance: <input type="number" ng-model="distance" class="form-control">
+            Time: <input type="number" ng-model="time" class="form-control">
+            <button class="btn btn-default" ng-click="addEntry()">Add</button>
+        </form>
     </div>
 
-    <div class="col-md-4" style="display:inline-block; min-height:290px;">
-        <datepicker ng-model="endDate" min-date="minDate" show-weeks="true" class="well well-sm"></datepicker>
-    </div>
+    <!-- Filter and list all entries-->
+    <div class="col-md-6">
+        <!-- Filter -->
+        Mininum date:
+        <p class="input-group">
+            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="startDate"
+                   is-open="startDateOpened" ng-focus="openStartDate($event)"/>
+      <span class="input-group-btn">
+        <button type="button" class="btn btn-default" ng-click="openStartDate($event)"><i
+                class="glyphicon glyphicon-calendar"></i></button>
+      </span>
+        </p>
 
-</div>
+        Maximum date:
+        <p class="input-group">
+            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="endDate"
+                   is-open="endDateOpened" ng-focus="openEndDate($event)"/>
+      <span class="input-group-btn">
+        <button type="button" class="btn btn-default" ng-click="openEndDate($event)"><i
+                class="glyphicon glyphicon-calendar"></i></button>
+      </span>
+        </p>
+        <p class="input-group">
+            <button class="btn btn-default" ng-click="clearDate()">Clear date</button>
+        </p>
 
+        <!-- List all entries-->
+        <div ng-repeat="entry in getDates() | orderBy:'date' " class="alert alert-info">
+            <p>Date: {{entry.date | date:'yyyy-MM-dd'}}</p>
 
-<div class="row">
-    <div ng-repeat="entry in getDates() | orderBy:'date' " class="alert alert-info">
-        <span class="glyphicon glyphicon-calendar"></span> {{entry.date | date:'fullDate'}}
-        <span class="glyphicon glyphicon-signal"></span> {{entry.distance}}
-        <span class="glyphicon glyphicon-hourglass"></span>
-        <input type="number" ng-readonly="!entry.writable" ng-model="entry.time">
+            <p>Distance: {{entry.distance}} km</p>
 
-        <span class="glyphicon glyphicon-oil"></span> {{entry.distance / entry.time | number:2}}
+            <p>Time: <input type="number" ng-readonly="!entry.writable" ng-model="entry.time"> minutes</p>
 
-        <button class="btn btn-danger" ng-click="deleteEntry(entry)">Delete</button>
-        <button class="btn btn-warning" ng-click="makeEntryEditable(entry)">
-            {{entry.editModeText || "Edit"}}
-        </button>
+            <p>Average speed: {{60 * entry.distance / entry.time | number:2}} km/h </p>
+
+            <button class="btn btn-danger" ng-click="deleteEntry(entry)">Delete</button>
+            <button class="btn btn-warning" ng-click="makeEntryEditable(entry)">
+                {{entry.editModeText || "Edit"}}
+            </button>
+        </div>
     </div>
 </div>
