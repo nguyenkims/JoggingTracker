@@ -18,4 +18,7 @@ Install all the JS libraries:
 Run the server:
 > python server.py
 
-Then go to [localhost](http://localhost:5000) to use the website ! 
+Then go to [localhost](http://localhost:5000) to use the website !
+ 
+To run unit test, please launch the server locally and then run all the unit tests by 
+> nosetests
