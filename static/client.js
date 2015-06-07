@@ -107,6 +107,9 @@ app.controller('mainCtrl', function ($scope, $http, $localStorage, $location) {
     };
 
     $scope.deleteEntry = function (entry) {
+        if (!window.confirm("Do you really want to delete this jogging session ?"))
+            return;
+
         $("body").addClass("loading");
         $http.post("/entry/delete", {id: entry.id}).
             success(function (data, status, headers) {
