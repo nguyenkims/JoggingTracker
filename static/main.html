@@ -17,10 +17,19 @@
     <!-- Add new entry-->
     <div class="col-md-3">
         <form>
-            <datepicker ng-model="date" show-weeks="true"></datepicker>
-            Distance: <input type="number" ng-model="distance" class="form-control">
-            Time: <input type="number" ng-model="time" class="form-control">
-            <button class="btn btn-default" ng-click="addEntry()">Add</button>
+            <div class="form-group">
+                <label>Date of your jogging</label>
+                <datepicker ng-model="date" show-weeks="true"></datepicker>
+            </div>
+            <div class="form-group">
+                <label>Distance (in km)</label>
+                <input type="number" ng-model="distance" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Time (in minutes)</label>
+                <input type="number" ng-model="time" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-default" ng-click="addEntry()">Add your jogging !</button>
         </form>
     </div>
 
@@ -47,7 +56,7 @@
       </span>
         </p>
         <p class="input-group">
-            <button class="btn btn-default" ng-click="clearDate()">Clear date</button>
+            <button class="btn btn-default" ng-click="clearDate()">Clear filter</button>
         </p>
 
         <!-- List all entries-->
@@ -69,7 +78,7 @@
 
     <div class="col-md-3">
         <div ng-repeat="stat in stats" class="alert-success">
-            <p> Week: {{stat.startDate | date:'yyyy-MM-dd'}} - {{stat.endDate| date:'yyyy-MM-dd'}} </p>
+            <p> Week: {{stat.startDate | date:'yyyy-MM-dd'}} -> {{stat.endDate| date:'yyyy-MM-dd'}} </p>
 
             <p> Average speed: {{60 * stat.averageSpeed}} km/h </p>
 
