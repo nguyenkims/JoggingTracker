@@ -1,5 +1,21 @@
-Create new account
-> http -f http://127.0.0.1:5000/user/create username="test user" password="test password"  
+## How to run the code
+You need to install `pip`, `python`, `git`, `npm`, `bower`
+> sudo apt-get install python-pip python-dev npm
+> sudo npm install -g bower
 
-Get the token (login)
-> http -f http://127.0.0.1:5000/user/token username="test user" password="test password"  
+Fix for ubuntu (see http://stackoverflow.com/questions/21491996/installing-bower-on-ubuntu )
+> sudo ln -s /usr/bin/nodejs /usr/bin/node 
+
+Then clone the project:
+> git clone git@git.toptal.com:Son-Nguyen-Kim/son-nguyen-kim.git
+
+Install all the necessary Python libraries:
+> pip install -r requirements.txt
+
+Install all the JS libraries:
+> cd static/; bower install
+
+Run the server:
+> python server.py
+
+Then go to [localhost](http://localhost:5000) to use the website ! 
