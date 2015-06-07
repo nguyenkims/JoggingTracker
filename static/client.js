@@ -38,10 +38,13 @@ app.controller('mainCtrl', function ($scope, $http, $localStorage, $location) {
 
     // todo: check the validity of token
 
+    const dayMilli = 86400000; // number of milliseconds per day
+
     $scope.entries = [];
     $scope.startDate = null;
     $scope.endDate = null;
     $scope.format = 'yyyy-MM-dd';
+    $scope.stats = [];
 
     var h = window.btoa($scope.token + ':' + 'uselesspassword');
     $http.defaults.headers.common['Authorization'] = 'Basic ' + h;
@@ -70,6 +73,7 @@ app.controller('mainCtrl', function ($scope, $http, $localStorage, $location) {
                 $("body").removeClass("loading");
                 cl(data.data);
                 $scope.entries = data.data;
+                $scope.computeStats();
             }).
             error(function (data, status, headers) {
                 $("body").removeClass("loading");
@@ -170,8 +174,66 @@ app.controller('mainCtrl', function ($scope, $http, $localStorage, $location) {
         }
 
         return res;
+    };
+
+    // return the week index starting from 1/1/1970
+    function getWeekIndex(date) {
+        var firstSunday = new Date(3 * dayMilli); // 1/1/1970 is thursday
+        if (date >= firstSunday)
+            return Math.floor((date - firstSunday) / (7 * dayMilli)) + 1;
+        else
+            return 0;
     }
 
+    // return the Sunday corresponding to the week index. Special case:
+    // for the first week, return 1/1/1970 even if it is not a Sunday
+    function getFirstDay(weekIndex) {
+        if (weekIndex == 0)
+            return new Date(0); // return 1/1/1970 even if it is not Sunday
+        else
+            return new Date(3 * dayMilli + (weekIndex - 1) * 7 * dayMilli);
+    }
+
+    // return the Saturday corresponding to the week index
+    function getLastDay(weekIndex) {
+        if (weekIndex == 0)
+            return new Date(2 * dayMilli); // return 3/1/1970 (saturday)
+        else
+            return new Date(3 * dayMilli + (weekIndex - 1) * 7 * dayMilli + 6 * dayMilli);
+    }
+
+    // return the week statistics
+    $scope.computeStats = function () {
+        var dict = {}; // (week_index, [entry])
+        var res = [];
+        for (var i = 0; i < $scope.entries.length; i++) {
+            cl("handle:" + $scope.entries[i]);
+            var weekIndex = getWeekIndex($scope.entries[i].date);
+            if (!(weekIndex in dict)) {
+                dict[weekIndex] = [];
+            }
+            dict[weekIndex].push($scope.entries[i]);
+        }
+
+        for (var weekIndex in dict) {
+            var totalDistance = 0, totalTime = 0, nbEntries = 0;
+            for (var i = 0; i < dict[weekIndex].length; i++) {
+                totalDistance += dict[weekIndex][i].distance;
+                totalTime += dict[weekIndex][i].time;
+                nbEntries += 1;
+            }
+
+            // calculate this week statistics
+            var stat = {
+                startDate: getFirstDay(weekIndex),
+                endDate: getLastDay(weekIndex),
+                averageSpeed: totalDistance / totalTime,
+                averageDistance: totalDistance / nbEntries
+            };
+            res.push(stat);
+        }
+        $scope.stats = res;
+    };
 });
 
 app.controller('loginCtrl', function ($scope, $http, $location, $localStorage) {

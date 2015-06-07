@@ -67,4 +67,15 @@
             </button>
         </div>
     </div>
+
+    <div class="col-md-3">
+        <button class="btn btn-success" ng-click="computeStats()">Compute stats</button>
+        <div ng-repeat="stat in stats" class="alert-success">
+            <p> Week: {{stat.startDate | date:'yyyy-MM-dd'}} - {{stat.endDate| date:'yyyy-MM-dd'}} </p>
+
+            <p> Average speed: {{60 * stat.averageSpeed}} km/h </p>
+
+            <p> Average distance: {{stat.averageDistance}} km </p>
+        </div>
+    </div>
 </div>
