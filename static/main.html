@@ -77,12 +77,17 @@
     </div>
 
     <div class="col-md-3">
-        <div ng-repeat="stat in stats" class="alert-success">
-            <p> Week: {{stat.startDate | date:'yyyy-MM-dd'}} -> {{stat.endDate| date:'yyyy-MM-dd'}} </p>
+        <div ng-repeat="stat in stats">
+            <div class="panel-default">
+              <div class="panel-heading">
+                Week: {{stat.startDate | date:'yyyy-MM-dd'}} -> {{stat.endDate| date:'yyyy-MM-dd'}}
+              </div>
 
-            <p> Average speed: {{60 * stat.averageSpeed | number:2}} km/h </p>
+              <p> Average speed: {{60 * stat.averageSpeed | number:2}} km/h </p>
 
-            <p> Average distance: {{stat.averageDistance | number:2}} km </p>
+              <p> Average distance: {{stat.averageDistance | number:2}} km </p>
+            </div>
+            <br>
         </div>
     </div>
 </div>
