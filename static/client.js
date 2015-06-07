@@ -42,6 +42,7 @@ app.controller('mainCtrl', function ($scope, $http, $localStorage, $location) {
     const dayMilli = 86400000; // number of milliseconds per day
 
     $scope.entries = [];
+    $scope.date = new Date();
     $scope.startDate = null;
     $scope.endDate = null;
     $scope.format = 'yyyy-MM-dd';
