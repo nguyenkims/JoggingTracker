@@ -163,7 +163,7 @@ app.controller('mainCtrl', function ($scope, $http, $localStorage, $location) {
         var res = [];
 
         for (i = 0; i < $scope.entries.length; i++) {
-            d = $scope.entries[i].date;
+            var d = $scope.entries[i].date;
             startOk = (startDate != null && startDate < d) || (startDate == null);
             endOk = (endDate != null && endDate > d) || (endDate == null);
 
@@ -172,6 +172,10 @@ app.controller('mainCtrl', function ($scope, $http, $localStorage, $location) {
             else
                 cl("do not push:" + d);
         }
+
+        res = res.sort(function(i1, i2){
+            return i1.date > i2.date ? 1: -1;
+        });
 
         return res;
     };

@@ -52,7 +52,7 @@
         </p>
 
         <!-- List all entries-->
-        <div ng-repeat="entry in getDates() | orderBy:'date' " class="alert alert-info">
+        <div ng-repeat="entry in getDates()" class="alert alert-info">
             <p>Date: {{entry.date | date:'yyyy-MM-dd'}}</p>
 
             <p>Distance: {{entry.distance}} km</p>
