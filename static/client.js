@@ -2,6 +2,7 @@ var app = angular.module('joggingApp', ['ngRoute', 'ui.bootstrap', 'ngStorage'])
 
 debug = true;
 
+// console.log
 var cl = function (msg) {
     if (debug)
         console.log(msg);
@@ -69,13 +70,13 @@ app.controller('mainCtrl', function ($scope, $http, $localStorage, $location) {
         cl("init entries");
         $("body").addClass("loading");
         $http.get("/entry/all").
-            success(function (data, status, headers) {
+            success(function (data) {
                 $("body").removeClass("loading");
                 cl(data.data);
                 $scope.entries = data.data;
                 $scope.computeStats();
             }).
-            error(function (data, status, headers) {
+            error(function (data) {
                 $("body").removeClass("loading");
                 alert("Getting all entries fails with this error:" + data.error);
             });
@@ -164,8 +165,8 @@ app.controller('mainCtrl', function ($scope, $http, $localStorage, $location) {
 
         for (i = 0; i < $scope.entries.length; i++) {
             var d = $scope.entries[i].date;
-            startOk = (startDate != null && startDate < d) || (startDate == null);
-            endOk = (endDate != null && endDate > d) || (endDate == null);
+            var startOk = (startDate != null && startDate < d) || (startDate == null);
+            var endOk = (endDate != null && endDate > d) || (endDate == null);
 
             if (startOk && endOk)
                 res.push($scope.entries[i]);
@@ -173,8 +174,8 @@ app.controller('mainCtrl', function ($scope, $http, $localStorage, $location) {
                 cl("do not push:" + d);
         }
 
-        res = res.sort(function(i1, i2){
-            return i1.date > i2.date ? 1: -1;
+        res = res.sort(function (i1, i2) {
+            return i1.date > i2.date ? 1 : -1;
         });
 
         return res;
