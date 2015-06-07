@@ -47,6 +47,15 @@ app.controller('mainCtrl', function ($scope, $http, $localStorage, $location) {
     $scope.endDate = null;
     $scope.format = 'yyyy-MM-dd';
     $scope.stats = [];
+    $scope.increaseDate = true;
+
+    $scope.sortIncreaseDate = function(){
+        $scope.increaseDate = true;
+    };
+
+    $scope.sortDecreaseDate = function(){
+        $scope.increaseDate = false;
+    };
 
     var h = window.btoa($scope.token + ':' + 'uselesspassword');
     $http.defaults.headers.common['Authorization'] = 'Basic ' + h;
@@ -187,7 +196,10 @@ app.controller('mainCtrl', function ($scope, $http, $localStorage, $location) {
         }
 
         res = res.sort(function (i1, i2) {
-            return i1.date > i2.date ? 1 : -1;
+            if ($scope.increaseDate)
+                return i1.date > i2.date ? 1 : -1;
+            else
+                return i1.date < i2.date ? 1 : -1;
         });
 
         return res;
