@@ -126,10 +126,13 @@ app.controller('mainCtrl', function ($scope, $http, $localStorage, $location) {
             });
     };
 
+    var oldEntryTime = null;
+
     $scope.makeEntryEditable = function (entry) {
         if (entry.writable === undefined || !entry.writable) {
             entry.writable = true;
             entry.editModeText = "Update";
+            oldEntryTime = entry.time;
         } else {
             entry.writable = false;
             entry.editModeText = "Edit";
@@ -141,7 +144,9 @@ app.controller('mainCtrl', function ($scope, $http, $localStorage, $location) {
                     $scope.computeStats();
                 }).
                 error(function (data, status, headers) {
-                    alert("Modifying entry fails with this error:" + data.error);
+                    alert("updating error :(. Please check your Internet connection. Use old value instead");
+                    entry.time = oldEntryTime;
+                    oldEntryTime = null;
                     cl('error.' + data);
                     $("body").removeClass("loading");
                 });
