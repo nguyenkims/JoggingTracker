@@ -3,6 +3,7 @@ import logging
 import logging.handlers
 
 from flask import Flask
+import flask
 from flask_sqlalchemy import SQLAlchemy
 
 basedir = os.path.abspath(os.path.dirname(__file__))  # /api folder
@@ -48,3 +49,8 @@ db.create_all()
 
 import auth_service
 import entry_service
+
+
+@app.route('/')
+def redirect_to_homepage():
+    return flask.redirect('/static/index.html')
