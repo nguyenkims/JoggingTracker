@@ -80,9 +80,9 @@
         <div ng-repeat="stat in stats" class="alert-success">
             <p> Week: {{stat.startDate | date:'yyyy-MM-dd'}} -> {{stat.endDate| date:'yyyy-MM-dd'}} </p>
 
-            <p> Average speed: {{60 * stat.averageSpeed}} km/h </p>
+            <p> Average speed: {{60 * stat.averageSpeed | number:2}} km/h </p>
 
-            <p> Average distance: {{stat.averageDistance}} km </p>
+            <p> Average distance: {{stat.averageDistance | number:2}} km </p>
         </div>
     </div>
 </div>
