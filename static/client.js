@@ -95,6 +95,7 @@ app.controller('mainCtrl', function ($scope, $http, $localStorage, $location) {
             success(function (data, status, headers) {
                 entry.id = data.id;
                 $scope.entries.push(entry);
+                $scope.computeStats();
                 $("body").removeClass("loading");
             }).
             error(function (data, status, headers) {
@@ -115,6 +116,7 @@ app.controller('mainCtrl', function ($scope, $http, $localStorage, $location) {
                         $scope.entries.splice(i, 1);
                     }
                 }
+                $scope.computeStats();
                 $("body").removeClass("loading");
             }).
             error(function (data, status, headers) {
@@ -136,6 +138,7 @@ app.controller('mainCtrl', function ($scope, $http, $localStorage, $location) {
             $http.post("/entry/changetime", {id: entry.id, time: entry.time}).
                 success(function (data, status, headers) {
                     $("body").removeClass("loading");
+                    $scope.computeStats();
                 }).
                 error(function (data, status, headers) {
                     alert("Modifying entry fails with this error:" + data.error);
