@@ -1,6 +1,7 @@
 ## How to run the code
 You need to install `pip`, `python`, `git`, `npm`, `bower`
 > sudo apt-get install python-pip python-dev npm
+
 > sudo npm install -g bower
 
 Fix for ubuntu (see http://stackoverflow.com/questions/21491996/installing-bower-on-ubuntu )
