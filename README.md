@@ -6,9 +6,6 @@ You need to install `pip`, `python`, `git`, `npm`, `bower`
 Fix for ubuntu (see http://stackoverflow.com/questions/21491996/installing-bower-on-ubuntu )
 > sudo ln -s /usr/bin/nodejs /usr/bin/node 
 
-Then clone the project:
-> git clone git@git.toptal.com:Son-Nguyen-Kim/son-nguyen-kim.git
-
 Install all the necessary Python libraries:
 > pip install -r requirements.txt
 
