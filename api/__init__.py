@@ -51,6 +51,11 @@ from api import auth_service
 from api import entry_service
 
 
+@app.route('/islive')
+def islive():
+    return "yes"
+
+
 @app.route('/')
 def redirect_to_homepage():
     return flask.redirect('/static/index.html')
