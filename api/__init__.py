@@ -1,9 +1,9 @@
-import os
 import logging
 import logging.handlers
+import os
 
-from flask import Flask
 import flask
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
 basedir = os.path.abspath(os.path.dirname(__file__))  # /api folder
@@ -42,13 +42,13 @@ class DevConfig(object):
 app = Flask(__name__, static_folder=os.path.join(rootdir, "static"))
 app.config.from_object(DevConfig())
 db = SQLAlchemy(app)
-import models
+from api import models
 
 # create all tables
 db.create_all()
 
-import auth_service
-import entry_service
+from api import auth_service
+from api import entry_service
 
 
 @app.route('/')
