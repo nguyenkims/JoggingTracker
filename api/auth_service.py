@@ -1,9 +1,8 @@
 from flask import request, jsonify, g
-from flask.ext.httpauth import HTTPBasicAuth
+from flask_httpauth import HTTPBasicAuth
 
 from api import app, get_logger
 from api.models import User
-
 
 # 1 year of token duration = 60 seconds * 60 minutes * 24 hour * 365 days
 TOKEN_DURATION = 60 * 60 * 24 * 365
