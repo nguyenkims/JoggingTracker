@@ -1,24 +1,32 @@
-FROM python:3.5.2
-
-# install node
-RUN apt-get update
-RUN apt-get install -y curl python-software-properties
-RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
-RUN  apt-get install nodejs
-RUN npm install -g bower
-
-
-ADD . /code
+FROM python:3.7-alpine
 WORKDIR /code
 
+# install node, bower: bower might need git as well
+RUN apk add --update nodejs nodejs-npm git \
+    && npm install -g bower
 
-# install dependencies via bower
-RUN cd static && ls && bower install --allow-root
+COPY ./requirements.txt .
 
-# install python dependencies
-RUN pip3 install -q -r requirements.txt
+RUN set -e; \
+    # workaround to install cryptography
+    apk del libressl-dev \
+    && apk add openssl-dev \
+    # for cffi
+    && apk add libffi-dev build-base \
+    # for pillow
+    && apk add build-base python-dev jpeg-dev zlib-dev \
+    && pip install -r requirements.txt \
+    # remove cryptography workaround
+    && apk del openssl-dev \
+    && apk add libressl-dev
+
+COPY ./static/bower.json ./static/bower.json
+RUN cd static \
+    && bower install --allow-root
+
+ADD . /code
 
 # expose port
 EXPOSE 5001
 
-CMD python3 jt.py
+CMD ["python", "jt.py" ]
